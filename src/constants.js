@@ -1,0 +1,1 @@
+export const DIARIES_TABLE_NAME = "diaries";
