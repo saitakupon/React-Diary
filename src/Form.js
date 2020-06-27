@@ -2,13 +2,16 @@ import React from 'react';
 import {Button,TextField} from '@material-ui/core';
 import {firestore} from "./Firebase";
 import {DIARIES_TABLE_NAME} from "./constants";
+import DiaryData from "./DiaryData";
 
 
 class Form extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			content:''
+			checkFlag:"false",
+			content:'',
+			diaries:[]
 		};
 	}
 
@@ -19,12 +22,31 @@ class Form extends React.Component {
 		})
 	}
 
+	async getDiaryData(){
+		const snapshot = await firestore.collection(DIARIES_TABLE_NAME).orderBy("date","asc").get();
+		const diariesData = snapshot.docs.map(d=>d.data());
+		this.setState({
+			diaries:diariesData
+		})
+	}
+
+	checkLoad(){
+		this.setState({
+			checkFlag:"true"
+		});
+	}
+
 	setContentToFirestore(content){
 		const data = { date: new Date().toLocaleString(), user: "saito", content: content };
 		firestore.collection(DIARIES_TABLE_NAME).add(data);
+		this.getDiaryData();
 	}
 
 	render() {
+		if(this.state.checkFlag==="false"){
+			this.checkLoad()
+			this.getDiaryData()
+		}
 		let sendText = (
 			<TextField
 				label="How are you?"
@@ -55,6 +77,9 @@ class Form extends React.Component {
 		)
 		return (
 			<div>
+				<DiaryData
+					diaries={this.state.diaries}
+				/>
 				<div className='sendText'>
 					{sendText}
 				</div>
