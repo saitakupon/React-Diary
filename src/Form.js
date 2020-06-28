@@ -1,5 +1,6 @@
 import React from 'react';
-import {Button,TextField} from '@material-ui/core';
+import {IconButton,TextField} from '@material-ui/core';
+import Send from '@material-ui/icons/Send';
 import {firestore} from "./Firebase";
 import {DIARIES_TABLE_NAME} from "./constants";
 import DiaryData from "./DiaryData";
@@ -25,8 +26,11 @@ class Form extends React.Component {
 	async getDiaryData(){
 		const snapshot = await firestore.collection(DIARIES_TABLE_NAME).orderBy("date","asc").get();
 		const diariesData = snapshot.docs.map(d=>d.data());
+		const sortDiariesData = diariesData.filter((output, index) => {
+				return output.user===this.props.luser;
+			})
 		this.setState({
-			diaries:diariesData
+			diaries:sortDiariesData
 		})
 	}
 
@@ -37,9 +41,20 @@ class Form extends React.Component {
 	}
 
 	setContentToFirestore(content){
-		const data = { date: new Date().toLocaleString(), user: "saito", content: content };
-		firestore.collection(DIARIES_TABLE_NAME).add(data);
-		this.getDiaryData();
+		let data = {
+			id:"",
+			date: new Date().toLocaleString(),
+			user: this.props.luser,
+			content: content
+		};
+		const setD = firestore.collection(DIARIES_TABLE_NAME).doc()
+		setD.set({
+			id:setD.id,
+			date:data.date,
+			user:data.user,
+			content:data.content
+		})
+		this.getDiaryData()
 	}
 
 	render() {
@@ -67,13 +82,12 @@ class Form extends React.Component {
 			/>
 			);
 		let sendButton = (
-			<Button variant="contained" color="primary" onClick={() => {
+			<IconButton aria-label="sendButton" color="primary" onClick={() => {
 				this.setContentToFirestore(this.state.content)
 				this.setState({content:''});
 			}}>
-				SEND
-				(Shift+Enter)
-			</Button>
+				<Send/>
+			</IconButton>
 		)
 		return (
 			<div>

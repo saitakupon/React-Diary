@@ -1,7 +1,6 @@
 import React from "react";
 import {Card, CardContent, Typography} from '@material-ui/core';
 
-
 class CardShow extends React.Component {
     render(){
         return(
@@ -14,6 +13,7 @@ class CardShow extends React.Component {
                         <Typography variant="h8" >
                             {this.props.content}
                         </Typography>
+
                     </CardContent>
                 </Card>
             </div>

@@ -12,8 +12,10 @@
     "@testing-library/user-event": "^7.2.1",
     "aws-amplify": "^3.0.17",
     "firebase": "^7.15.5",
+    "firebaseui": "^4.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-firebaseui": "^4.1.0",
     "react-scripts": "3.4.1"
   },
   "scripts": {
