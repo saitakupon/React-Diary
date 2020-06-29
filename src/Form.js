@@ -2,7 +2,6 @@ import React from 'react';
 import {IconButton,TextField} from '@material-ui/core';
 import Send from '@material-ui/icons/Send';
 import {firestore} from "./Firebase";
-import {DIARIES_TABLE_NAME} from "./constants";
 import DiaryData from "./DiaryData";
 
 
@@ -10,7 +9,7 @@ class Form extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			checkFlag:"false",
+			checkFlag:false,
 			content:'',
 			diaries:[]
 		};
@@ -24,19 +23,16 @@ class Form extends React.Component {
 	}
 
 	async getDiaryData(){
-		const snapshot = await firestore.collection(DIARIES_TABLE_NAME).orderBy("date","asc").get();
+		const snapshot = await firestore.collection(this.props.luser).orderBy("date","asc").get();
 		const diariesData = snapshot.docs.map(d=>d.data());
-		const sortDiariesData = diariesData.filter((output, index) => {
-				return output.user===this.props.luser;
-			})
 		this.setState({
-			diaries:sortDiariesData
+			diaries:diariesData
 		})
 	}
 
 	checkLoad(){
 		this.setState({
-			checkFlag:"true"
+			checkFlag:true
 		});
 	}
 
@@ -44,21 +40,19 @@ class Form extends React.Component {
 		let data = {
 			id:"",
 			date: new Date().toLocaleString(),
-			user: this.props.luser,
 			content: content
 		};
-		const setD = firestore.collection(DIARIES_TABLE_NAME).doc()
+		const setD = firestore.collection(this.props.luser).doc()
 		setD.set({
 			id:setD.id,
 			date:data.date,
-			user:data.user,
 			content:data.content
 		})
 		this.getDiaryData()
 	}
 
 	render() {
-		if(this.state.checkFlag==="false"){
+		if(this.state.checkFlag===false){
 			this.checkLoad()
 			this.getDiaryData()
 		}

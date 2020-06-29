@@ -10,7 +10,6 @@ class DiaryData extends React.Component {
                         <CardShow
                             id={data.id}
                             date={data.date}
-                            user={data.user}
                             content={data.content}
                         />
                     )

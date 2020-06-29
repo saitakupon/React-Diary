@@ -22,20 +22,26 @@ class Main extends React.Component {
     }
 
     render() {
+        let authScene;
+        this.state.user ? (
+            authScene = (
+                <div>
+                    <Form luser = {this.state.user && this.state.user.email} />
+                    <div className="AuthOut">
+                        <Button variant="contained" color="default" onClick={this.logout}>Logout</Button>
+                    </div>
+                </div>
+            )
+        ) : (
+            authScene = (
+                <div className="AuthIn">
+                    <Button variant="contained" color="default" onClick={this.login} >Login</Button>
+                </div>
+            )
+        )
         return (
             <div className="main">
-                {this.state.user ? (
-                    <div>
-                        <Form luser = {this.state.user && this.state.user.email} />
-                        <div className="AuthOut">
-                            <Button variant="contained" color="default" onClick={this.logout}>Logout</Button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="AuthIn">
-                        <Button variant="contained" color="default" onClick={this.login} >Login</Button>
-                    </div>
-                )}
+                {authScene}
             </div>
         );
     }
