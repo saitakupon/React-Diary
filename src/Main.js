@@ -35,7 +35,7 @@ class Main extends React.Component {
         ) : (
             authScene = (
                 <div className="AuthIn">
-                    <Button variant="contained" color="default" onClick={this.login} >Login</Button>
+                    <Button variant="contained" color="default" onClick={this.login}>Login</Button>
                 </div>
             )
         )

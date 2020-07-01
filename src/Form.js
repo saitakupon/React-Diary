@@ -48,7 +48,12 @@ class Form extends React.Component {
 			date:data.date,
 			content:data.content
 		})
-		this.getDiaryData()
+		this.getDiaryData();
+	}
+
+	deleteContentFromFirestore = async (id)=>{
+		await firestore.collection(this.props.luser).doc(id).delete();
+		await this.getDiaryData();
 	}
 
 	render() {
@@ -86,6 +91,7 @@ class Form extends React.Component {
 		return (
 			<div>
 				<DiaryData
+					delMethod={this.deleteContentFromFirestore}
 					diaries={this.state.diaries}
 				/>
 				<div className='sendText'>

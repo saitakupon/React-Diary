@@ -8,9 +8,11 @@ class DiaryData extends React.Component {
                 {this.props.diaries.map((data)=>{
                     return(
                         <CardShow
+                            user={data.user}
                             id={data.id}
                             date={data.date}
                             content={data.content}
+                            delMethod={this.props.delMethod}
                         />
                     )
                 })}
