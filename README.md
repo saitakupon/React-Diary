@@ -2,14 +2,13 @@
  
 Simple Diary App Created by saitakupon
 
-Login by Google account only.
+Please Login with your Google account.
  
 # DEMO
  
-https://diary-fb.web.app
+https://diary.saitakupon.com
 
-<img width="500" alt="" src="https://user-images.githubusercontent.com/58939922/86916591-c6865380-c15e-11ea-9524-3930448a32ac.png">
-
+<img width="500" alt="" src="https://user-images.githubusercontent.com/58939922/102261067-82408000-3f54-11eb-9478-9c91e02f209d.png"><img width="250" alt="" src="https://user-images.githubusercontent.com/58939922/102261538-29251c00-3f55-11eb-9729-ad601f7a5120.jpeg">
 # Environment
 
 * macOS Catalina 10.15.5
