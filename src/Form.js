@@ -1,5 +1,5 @@
 import React from 'react';
-import {IconButton,TextField} from '@material-ui/core';
+import {AppBar, IconButton, TextField, Toolbar} from '@material-ui/core';
 import Send from '@material-ui/icons/Send';
 import {firestore} from "./Firebase";
 import DiaryData from "./DiaryData";
@@ -9,82 +9,85 @@ class Form extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			checkFlag:false,
-			content:'',
-			diaries:[]
+			checkFlag: false,
+			content: '',
+			diaries: []
 		};
 	}
 
-	handleContentChange(event){
-		const inputValue=event.target.value;
+	handleContentChange(event) {
+		const inputValue = event.target.value;
 		this.setState({
 			content: inputValue
 		})
 	}
 
-	async getDiaryData(){
-		const snapshot = await firestore.collection(this.props.luser).orderBy("date","asc").get();
-		const diariesData = snapshot.docs.map(d=>d.data());
+	async getDiaryData() {
+		const snapshot = (await firestore.collection(this.props.luser).orderBy("date", "asc").get());
+		const diariesData = snapshot.docs.map(d => d.data());
 		this.setState({
-			diaries:diariesData
+			diaries: diariesData
 		})
 	}
 
-	checkLoad(){
+	checkLoad() {
 		this.setState({
-			checkFlag:true
+			checkFlag: true
 		});
 	}
 
-	setContentToFirestore(content){
+	async setContentToFirestore(content) {
 		let data = {
-			id:"",
+			id: "",
 			date: new Date().toLocaleString(),
 			content: content
 		};
 		const setD = firestore.collection(this.props.luser).doc()
-		setD.set({
-			id:setD.id,
-			date:data.date,
-			content:data.content
+		await setD.set({
+			id: setD.id,
+			date: data.date,
+			content: data.content
 		})
-		this.getDiaryData();
+		await this.getDiaryData();
 	}
 
-	deleteContentFromFirestore = async (id)=>{
+	deleteContentFromFirestore = async (id) => {
 		await firestore.collection(this.props.luser).doc(id).delete();
 		await this.getDiaryData();
 	}
 
 	render() {
-		if(this.state.checkFlag===false){
+		if (this.state.checkFlag === false) {
 			this.checkLoad()
-			this.getDiaryData()
+			this.getDiaryData().then()
 		}
 		let sendText = (
 			<TextField
-				label="How are you?"
-				variant="outlined"
-				color="textSecondary"
-				value={this.state.content}
-				onChange={(event)=>{this.handleContentChange(event)}}
 				fullWidth
+				label="How are you?"
+				variant="standard"
+				color="secondary"
+				value={this.state.content}
+				onChange={(event) => {
+					this.handleContentChange(event)
+				}}
 				multiline
-				onKeyPress={e =>{
+				onKeyPress={async (e) => {
 					if (e.key === 'Enter' && e.shiftKey) {
 						e.preventDefault()
-						this.setContentToFirestore(this.state.content)
-						this.setState({content:''});
+						await this.setContentToFirestore(this.state.content)
+						this.setState({content: ''});
 					}
 				}
-			}
+				}
 			/>
-			);
+		);
 		let sendButton = (
-			<IconButton aria-label="sendButton" color="primary" onClick={() => {
-				this.setContentToFirestore(this.state.content)
-				this.setState({content:''});
-			}}>
+			<IconButton aria-label="sendButton" size="medium" color="secondary" style={{marginLeft: "auto"}}
+						onClick={async () => {
+							await this.setContentToFirestore(this.state.content)
+							this.setState({content: ''});
+						}}>
 				<Send/>
 			</IconButton>
 		)
@@ -94,12 +97,13 @@ class Form extends React.Component {
 					delMethod={this.deleteContentFromFirestore}
 					diaries={this.state.diaries}
 				/>
-				<div className='sendText'>
-					{sendText}
-				</div>
-				<div className='sendButton'>
-					{sendButton}
-				</div>
+				<Toolbar position="static" color="inherit" style={{top: "auto", bottom: 0, padding: 0}}>
+				</Toolbar>
+				<AppBar position="fixed" color="inherit" style={{top: "auto", bottom: 0, padding: 0}}>
+					<Toolbar>
+						{sendText}{sendButton}
+					</Toolbar>
+				</AppBar>
 			</div>
 		);
 	}

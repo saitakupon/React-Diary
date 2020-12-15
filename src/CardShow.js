@@ -8,17 +8,17 @@ class CardShow extends React.Component {
             <div className="CardShow">
                 <Card variant="outlined">
                     <CardContent>
-                        <Typography variant="h10" color="primary">
-                            {`${this.props.date} \n`}
-                        </Typography>
-                        <Typography variant="h8" >
-                            {this.props.content}
+                        <Typography variant="caption" color="inherit">
+                            {`${this.props.date}`}
                         </Typography>
                         <IconButton aria-label="delete" onClick={()=>{
                             this.props.delMethod(this.props.id)
                         }}>
-                            <DeleteIcon fontSize="small" />
+                            <DeleteIcon color="action" fontSize="inherit" />
                         </IconButton>
+                        <Typography variant="subtitle2" >
+                            {this.props.content}
+                        </Typography>
                     </CardContent>
                 </Card>
             </div>
